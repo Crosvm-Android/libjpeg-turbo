@@ -260,6 +260,42 @@ cc_defaults {
                 "-DELF",
             ],
         },
+        linux_glibc_x86_64: {
+            // Minimal crosvm builds only need libjpeg to link on the host; use
+            // the generic C fallback instead of NASM/YASM-based SIMD objects so
+            // the build does not depend on the yasm prebuilt toolchain.
+            exclude_srcs: [
+                "simd/x86_64/jccolor-avx2.asm",
+                "simd/x86_64/jccolor-sse2.asm",
+                "simd/x86_64/jcgray-avx2.asm",
+                "simd/x86_64/jcgray-sse2.asm",
+                "simd/x86_64/jchuff-sse2.asm",
+                "simd/x86_64/jcphuff-sse2.asm",
+                "simd/x86_64/jcsample-avx2.asm",
+                "simd/x86_64/jcsample-sse2.asm",
+                "simd/x86_64/jdcolor-avx2.asm",
+                "simd/x86_64/jdcolor-sse2.asm",
+                "simd/x86_64/jdmerge-avx2.asm",
+                "simd/x86_64/jdmerge-sse2.asm",
+                "simd/x86_64/jdsample-avx2.asm",
+                "simd/x86_64/jdsample-sse2.asm",
+                "simd/x86_64/jfdctflt-sse.asm",
+                "simd/x86_64/jfdctfst-sse2.asm",
+                "simd/x86_64/jfdctint-avx2.asm",
+                "simd/x86_64/jfdctint-sse2.asm",
+                "simd/x86_64/jidctflt-sse2.asm",
+                "simd/x86_64/jidctfst-sse2.asm",
+                "simd/x86_64/jidctint-avx2.asm",
+                "simd/x86_64/jidctint-sse2.asm",
+                "simd/x86_64/jidctred-sse2.asm",
+                "simd/x86_64/jquantf-sse2.asm",
+                "simd/x86_64/jquanti-avx2.asm",
+                "simd/x86_64/jquanti-sse2.asm",
+                "simd/x86_64/jsimd.c",
+                "simd/x86_64/jsimdcpu.asm",
+            ],
+            srcs: ["jsimd_none.c"],
+        },
         darwin: {
             asflags: [
                 "-DMACHO",
@@ -295,6 +331,7 @@ cc_library {
     sdk_version: "current",
     min_sdk_version: "apex_inherit",
     apex_available: [
+        "com.android.virt",
         "com.android.mediaprovider",
         "//apex_available:platform",
     ],
